@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Autonomous Software Factory Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #38bdf8;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      margin-bottom: 20px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      background: #38bdf8;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #output {
+      margin-top: 20px;
+      background: #020617;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<h2>24/7 Autonomous Software Factory</h2>
+
+<div class="card">
+  <label>Service</label>
+  <select id="service">
+    <option value="ui-service">UI Service</option>
+    <option value="api-service">API Service</option>
+    <option value="auth-service">Auth Service</option>
+    <option value="payment-service">Payment Service</option>
+    <option value="db-service">Database Service</option>
+  </select>
+
+  <label>Error Code</label>
+  <select id="error">
+  <option value="UI_NULL_ERROR">UI Null Error</option>
+  <option value="API_TIMEOUT">API Timeout</option>
+  <option value="AUTH_FAILURE">Auth Failure</option>
+  <option value="DB_CONNECTION_LOST">DB Connection Lost</option>
+  <option value="CART_EMPTY">Cart Empty Error</option>
+</select>
+
+  <button onclick="sendLog()">Send Log</button>
+</div>
+
+<div id="output">System ready…</div>
+
+<h3>Before Fix</h3>
+<pre id="before"></pre>
+
+<h3>After Fix</h3>
+<pre id="after"></pre>
+
+<script>
+async function sendLog() {
+  const service = document.getElementById("service").value;
+  const error_code = document.getElementById("error").value;
+
+  await fetch("/log", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      service,
+      error_code,
+      file: "production/app.js"
+    })
+  });
+}
+
+// Real-time event listener
+const eventSource = new EventSource("/events");
+
+eventSource.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+
+  const output = document.getElementById("output");
+
+  if (data.type === "duplicate") {
+    output.textContent =
+      "Duplicate log ignored: " +
+      JSON.stringify(data.log);
+  }
+
+  if (data.type === "processed") {
+    output.textContent =
+      "Log: " + JSON.stringify(data.log) +
+      "\nSeverity: " + data.severity +
+      "\nAction: " + data.action.type +
+      "\nMessage: " + data.action.message;
+
+    // Show before/after code
+    if (data.before) {
+      document.getElementById("before").textContent = data.before;
+    }
+
+    if (data.after) {
+      document.getElementById("after").textContent = data.after;
+    }
+  }
+};
+</script>
+
+</body>
+</html>

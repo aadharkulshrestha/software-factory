@@ -1,0 +1,22 @@
+[
+  {
+    "service": "ui-service",
+    "error_code": "UI_WARNING",
+    "message": "Button misaligned"
+  },
+  {
+    "service": "ui-service",
+    "error_code": "UI_WARNING",
+    "message": "Button misaligned"
+  },
+  {
+    "service": "api-service",
+    "error_code": "API_TIMEOUT",
+    "message": "Request timed out"
+  },
+  {
+    "service": "auth-service",
+    "error_code": "AUTH_FAILURE",
+    "message": "Invalid token"
+  }
+]
