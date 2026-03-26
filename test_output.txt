@@ -1,0 +1,311 @@
+{"timestamp":"2026-03-23T23:29:46.545Z","level":"INFO","message":"[Cache] STORED fix for UI_NULL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for API_TIMEOUT"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for CART_EMPTY"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for CART_TOTAL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for AUTH_FAILURE"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for DB_CONNECTION_LOST"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] STORED fix for RENDER_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.547Z","level":"INFO","message":"[Cache] Primed with 7 fallback fixes"}
+{"timestamp":"2026-03-23T23:29:46.593Z","level":"INFO","message":"HTTP Request","requestId":"92fc100f-02ac-4eda-89a6-57e5ccd1c4c8","method":"POST","path":"/log","status":400,"durationMs":3}
+{"timestamp":"2026-03-23T23:29:46.602Z","level":"INFO","message":"HTTP Request","requestId":"42a60110-834a-4bae-a87e-6eff5b5506ef","method":"POST","path":"/log","status":400,"durationMs":0}
+{"timestamp":"2026-03-23T23:29:46.607Z","level":"INFO","message":"[API] Log received","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.607Z","level":"INFO","message":"[Worker] Log queued","service":"ui-service","error_code":"UI_NULL_ERROR","severity":"LOW","queueSize":1}
+{"timestamp":"2026-03-23T23:29:46.607Z","level":"INFO","message":"HTTP Request","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","method":"POST","path":"/log","status":202,"durationMs":1}
+{"timestamp":"2026-03-23T23:29:46.608Z","level":"INFO","message":"[Decision] LOW ??? Autonomous AI Repair","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","severity":"LOW"}
+{"timestamp":"2026-03-23T23:29:46.608Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.608Z","level":"INFO","message":"[PatchEngine] Patch already applied (idempotent skip)","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.609Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.609Z","level":"INFO","message":"[PatchEngine] Tests passed ??? auto-fix DEPLOYED","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.610Z","level":"INFO","message":"[Deployment] Starting canary deploy (10% traffic)","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","errorCode":"UI_NULL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.614Z","level":"INFO","message":"[API] Log received","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY"}
+{"timestamp":"2026-03-23T23:29:46.614Z","level":"INFO","message":"[Worker] Log queued","service":"dedup-service","error_code":"CART_EMPTY","severity":"LOW","queueSize":1}
+{"timestamp":"2026-03-23T23:29:46.614Z","level":"INFO","message":"HTTP Request","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","method":"POST","path":"/log","status":202,"durationMs":0}
+{"timestamp":"2026-03-23T23:29:46.618Z","level":"INFO","message":"[API] Log received","requestId":"324499af-4d49-419e-8e24-214633dccf29","service":"dedup-service","error_code":"CART_EMPTY"}
+{"timestamp":"2026-03-23T23:29:46.618Z","level":"INFO","message":"[Worker] Duplicate log suppressed","service":"dedup-service","error_code":"CART_EMPTY"}
+{"timestamp":"2026-03-23T23:29:46.619Z","level":"INFO","message":"HTTP Request","requestId":"324499af-4d49-419e-8e24-214633dccf29","method":"POST","path":"/log","status":200,"durationMs":1}
+{"timestamp":"2026-03-23T23:29:46.623Z","level":"INFO","message":"[API] Log received","requestId":"543f15d3-22f9-4dd9-b4ce-d733616b0908","service":"auth-service","error_code":"AUTH_FAILURE"}
+{"timestamp":"2026-03-23T23:29:46.623Z","level":"INFO","message":"[Worker] Log queued","service":"auth-service","error_code":"AUTH_FAILURE","severity":"HIGH","queueSize":2}
+{"timestamp":"2026-03-23T23:29:46.624Z","level":"INFO","message":"HTTP Request","requestId":"543f15d3-22f9-4dd9-b4ce-d733616b0908","method":"POST","path":"/log","status":202,"durationMs":1}
+{"timestamp":"2026-03-23T23:29:46.627Z","level":"INFO","message":"[API] Log received","requestId":"6164aa97-6804-4dbf-b52d-8780acf35c2c","service":"db-service","error_code":"DB_CONNECTION_LOST"}
+{"timestamp":"2026-03-23T23:29:46.627Z","level":"INFO","message":"[Worker] Log queued","service":"db-service","error_code":"DB_CONNECTION_LOST","severity":"CRITICAL","queueSize":3}
+{"timestamp":"2026-03-23T23:29:46.628Z","level":"INFO","message":"HTTP Request","requestId":"6164aa97-6804-4dbf-b52d-8780acf35c2c","method":"POST","path":"/log","status":202,"durationMs":1}
+{"timestamp":"2026-03-23T23:29:46.633Z","level":"INFO","message":"HTTP Request","requestId":"0a4a953b-0772-4864-9883-3a2a14b86513","method":"GET","path":"/health","status":200,"durationMs":2}
+{"timestamp":"2026-03-23T23:29:46.639Z","level":"INFO","message":"HTTP Request","requestId":"2c37ab95-076d-4524-ae47-6367204341a5","method":"GET","path":"/metrics","status":200,"durationMs":1}
+{"timestamp":"2026-03-23T23:29:46.643Z","level":"INFO","message":"HTTP Request","requestId":"63877bde-3aa6-459f-96a1-7e7ada05f206","method":"GET","path":"/circuit","status":200,"durationMs":1}
+node : PASS tests/integ
+ration/flow.test.js
+At line:1 char:1
++ node node_modules/jes
+t/bin/jest.js 
+--verbose --runInBand 
+--forceExit  ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (PASS tests/in   
+ tegration/flow.tes    
+t.js:String) [], R    
+emoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  Integration ??? log 
+pipeline flow
+    ??? POST /log 
+requires service field 
+(35 ms)
+    ??? POST /log 
+requires error_code 
+field (6 ms)
+    ??? POST /log 
+accepts valid log and 
+returns 202 (7 ms)
+    ??? POST /log 
+suppresses duplicate 
+within 5s window (9 ms)
+    ??? AUTH_FAILURE 
+is classified as HIGH 
+severity (4 ms)
+    ??? 
+DB_CONNECTION_LOST is 
+classified as CRITICAL 
+severity (3 ms)
+    ??? GET /health 
+returns status OK with 
+uptime (5 ms)
+    ??? GET /metrics 
+returns observability 
+data (5 ms)
+    ??? GET /circuit 
+returns circuit 
+breaker status (4 ms)
+
+PASS tests/unit/classif
+ier.test.js
+  Classifier ??? 
+severity classification
+    ??? UI_NULL_ERROR 
+??? LOW
+    ??? CART_EMPTY ??? 
+LOW (1 ms)
+    ??? UI_WARNING ??? 
+LOW
+    ??? API_TIMEOUT 
+??? MEDIUM
+    ??? 
+SERVICE_UNAVAILABLE 
+??? MEDIUM
+    ??? 
+RATE_LIMIT_EXCEEDED 
+??? MEDIUM
+    ??? AUTH_FAILURE 
+??? HIGH
+    ??? 
+PAYMENT_DECLINED ??? 
+HIGH
+    ??? 
+DB_CONNECTION_LOST ??? 
+CRITICAL
+    ??? SYSTEM_CRASH 
+??? CRITICAL
+    ??? Unknown 
+error_code ??? 
+defaults to LOW (1 ms)
+    ??? Missing 
+error_code ??? 
+defaults to LOW
+    ??? Custom rule 
+can be injected and 
+takes priority
+    ??? Broken rule 
+predicate is silently 
+skipped (1 ms)
+
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":1,"threshold":3,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":2,"threshold":3,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":3,"threshold":3,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] CLOSED ??? OPEN"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":1,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":2,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.772Z","level":"WARN","message":"[CircuitBreaker:test] CLOSED ??? OPEN"}
+{"timestamp":"2026-03-23T23:29:46.781Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":1,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.781Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":2,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.781Z","level":"WARN","message":"[CircuitBreaker:test] CLOSED ??? OPEN"}
+{"timestamp":"2026-03-23T23:29:46.818Z","level":"INFO","message":"[Deployment] Canary healthy ??? rolling out to 100%","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","errorCode":"UI_NULL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.849Z","level":"WARN","message":"[CircuitBreaker:test] OPEN ??? HALF_OPEN"}
+{"timestamp":"2026-03-23T23:29:46.849Z","level":"WARN","message":"[CircuitBreaker:test] HALF_OPEN ??? CLOSED"}
+{"timestamp":"2026-03-23T23:29:46.851Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":1,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.851Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":2,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.851Z","level":"WARN","message":"[CircuitBreaker:test] CLOSED ??? OPEN"}
+{"timestamp":"2026-03-23T23:29:46.912Z","level":"WARN","message":"[CircuitBreaker:test] OPEN ??? HALF_OPEN"}
+{"timestamp":"2026-03-23T23:29:46.913Z","level":"WARN","message":"[CircuitBreaker:test] HALF_OPEN ??? CLOSED"}
+{"timestamp":"2026-03-23T23:29:46.914Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":1,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.914Z","level":"WARN","message":"[CircuitBreaker:test] Failure recorded","failureCount":2,"threshold":2,"error":"fail"}
+{"timestamp":"2026-03-23T23:29:46.914Z","level":"WARN","message":"[CircuitBreaker:test] CLOSED ??? OPEN"}
+PASS tests/unit/circuit
+Breaker.test.js
+  CircuitBreaker ??? 
+three-state protection
+    ??? Starts in 
+CLOSED state (1 ms)
+    ??? Successful 
+call passes through in 
+CLOSED state
+    ??? Transitions 
+CLOSED ??? OPEN after 
+threshold failures (1 
+ms)
+    ??? Rejects calls 
+immediately when OPEN 
+(9 ms)
+    ??? Transitions 
+OPEN ??? HALF_OPEN 
+after cooldown (69 ms)
+    ??? HALF_OPEN ??? 
+CLOSED on successful 
+trial call (63 ms)
+    ??? reset() forces 
+CLOSED state (1 ms)
+
+{"timestamp":"2026-03-23T23:29:46.979Z","level":"INFO","message":"[Cache] STORED fix for UI_NULL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.979Z","level":"INFO","message":"[Cache] STORED fix for API_TIMEOUT"}
+{"timestamp":"2026-03-23T23:29:46.979Z","level":"INFO","message":"[Cache] STORED fix for CART_EMPTY"}
+{"timestamp":"2026-03-23T23:29:46.980Z","level":"INFO","message":"[Cache] STORED fix for CART_TOTAL_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.980Z","level":"INFO","message":"[Cache] STORED fix for AUTH_FAILURE"}
+{"timestamp":"2026-03-23T23:29:46.980Z","level":"INFO","message":"[Cache] STORED fix for DB_CONNECTION_LOST"}
+{"timestamp":"2026-03-23T23:29:46.980Z","level":"INFO","message":"[Cache] STORED fix for RENDER_ERROR"}
+{"timestamp":"2026-03-23T23:29:46.980Z","level":"INFO","message":"[Cache] Primed with 7 fallback fixes"}
+{"timestamp":"2026-03-23T23:29:46.981Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586981.js"}
+{"timestamp":"2026-03-23T23:29:46.982Z","level":"INFO","message":"[PatchEngine] Patch applied","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586981.js"}
+{"timestamp":"2026-03-23T23:29:46.982Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586981.js"}
+{"timestamp":"2026-03-23T23:29:46.982Z","level":"INFO","message":"[PatchEngine] Tests passed ??? auto-fix DEPLOYED","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586981.js"}
+{"timestamp":"2026-03-23T23:29:46.984Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.984Z","level":"INFO","message":"[PatchEngine] Patch applied","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Tests passed ??? auto-fix DEPLOYED","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Patch already applied (idempotent skip)","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.985Z","level":"INFO","message":"[PatchEngine] Tests passed ??? auto-fix DEPLOYED","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586983.js"}
+{"timestamp":"2026-03-23T23:29:46.987Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586986.js"}
+{"timestamp":"2026-03-23T23:29:46.987Z","level":"INFO","message":"[PatchEngine] Patch applied","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586986.js"}
+{"timestamp":"2026-03-23T23:29:46.987Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586986.js"}
+{"timestamp":"2026-03-23T23:29:46.988Z","level":"WARN","message":"[PatchEngine] Tests FAILED ??? rollback applied","requestId":"unknown","service":"ui","error_code":"UI_NULL_ERROR","filePath":"C:\\Users\\aadha\\AppData\\Local\\Temp\\test-app-1774308586986.js","testOutput":"Test failed: TypeError"}
+{"timestamp":"2026-03-2
+3T23:29:46.989Z","level
+":"ERROR","message":"[P
+atchEngine] Cannot 
+read target file","requ
+estId":"unknown","servi
+ce":"ui","error_code":"
+UI_NULL_ERROR","filePat
+h":"/nonexistent/path/a
+pp.js","error":"ENOENT:
+ no such file or 
+directory, open 'C:\\no
+nexistent\\path\\app.js
+'"}
+{"timestamp":"2026-03-23T23:29:46.990Z","level":"INFO","message":"[Decision] Action completed","requestId":"fe9cc789-44f8-45d7-9b2e-5a716315b6cb","service":"ui-service","error_code":"UI_NULL_ERROR","severity":"LOW","resultType":"DEPLOYED","durationMs":382}
+{"timestamp":"2026-03-2
+3T23:29:46.991Z","level
+":"ERROR","message":"[D
+ecision] CRITICAL ??? 
+Emergency escalation","
+requestId":"6164aa97-68
+04-4dbf-b52d-8780acf35c
+2c","service":"db-servi
+ce","error_code":"DB_CO
+NNECTION_LOST","severit
+y":"CRITICAL"}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"INFO","message":"[Decision] Action completed","requestId":"6164aa97-6804-4dbf-b52d-8780acf35c2c","service":"db-service","error_code":"DB_CONNECTION_LOST","severity":"CRITICAL","resultType":"ESCALATED","durationMs":0}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"WARN","message":"[Decision] HIGH ??? Escalating to on-call engineer","requestId":"543f15d3-22f9-4dd9-b4ce-d733616b0908","service":"auth-service","error_code":"AUTH_FAILURE","severity":"HIGH"}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"INFO","message":"[Decision] Action completed","requestId":"543f15d3-22f9-4dd9-b4ce-d733616b0908","service":"auth-service","error_code":"AUTH_FAILURE","severity":"HIGH","resultType":"ESCALATED","durationMs":0}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"INFO","message":"[Decision] LOW ??? Autonomous AI Repair","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY","severity":"LOW"}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"INFO","message":"[PatchEngine] Fix obtained","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.991Z","level":"INFO","message":"[PatchEngine] Patch already applied (idempotent skip)","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.992Z","level":"INFO","message":"[PatchEngine] Running validation tests","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.992Z","level":"INFO","message":"[PatchEngine] Tests passed ??? auto-fix DEPLOYED","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","service":"dedup-service","error_code":"CART_EMPTY","filePath":"production/app.js"}
+{"timestamp":"2026-03-23T23:29:46.992Z","level":"INFO","message":"[Deployment] Starting canary deploy (10% traffic)","requestId":"b28109cd-f899-4dbf-946f-a0dc28578114","errorCode":"CART_EMPTY"}
+PASS tests/unit/patchEn
+gine.test.js
+  PatchEngine ??? 
+idempotent patching
+    ??? UI_NULL_ERROR: 
+applies null guard 
+patch (3 ms)
+    ??? UI_NULL_ERROR: 
+patch is idempotent 
+(not applied twice) (3 
+ms)
+    ??? On test 
+failure: rolls back to 
+original code (2 ms)
+    ??? On missing 
+file: returns 
+ESCALATED (1 ms)
+
+PASS tests/unit/duplica
+teFilter.test.js
+  DuplicateFilter ??? 
+dedup with sliding 
+window
+    ??? First 
+occurrence of a log is 
+NOT a duplicate
+    ??? Same log 
+within window IS a 
+duplicate (1 ms)
+    ??? Different 
+service+error_code 
+combination is NOT a 
+duplicate
+    ??? Same log after 
+window expires is NOT 
+a duplicate (64 ms)
+    ??? reset() clears 
+all entries
+    ??? size() tracks 
+stored entries
+    ??? flush() 
+removes expired 
+entries (28 ms)
+
+  console.log
+    Test passed
+
+      at Object.log (test.js:18:11)
+
+  ???  process.exit 
+called with "0"
+
+    [0m [90m 17 
+|[39m
+     [90m 18 |[39m   
+console[33m.[39mlog(
+[32m"Test passed"[39m)
+[33m;[39m
+    [31m[1m>[22m[39
+m[90m 19 |[39m   proc
+ess[33m.[39mexit([35
+m0[39m)[33m;[39m
+     [90m    |[39m   
+        
+[31m[1m^[22m[39m
+     [90m 20 |[39m } 
+[36mcatch[39m (err) {
+     [90m 21 |[39m   
+console[33m.[39mlog(
+[32m"Test failed:"[39m
+[33m,[39m err[33m.[
+39mmessage)[33m;[39m
+     [90m 22 |[39m   
+process[33m.[39mexit(
+[35m1[39m)[33m;[39m
+[0m
+
+      at Object.exit 
+(test.js:19:11)

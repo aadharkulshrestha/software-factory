@@ -1,77 +1,44 @@
-// server.js
-const express = require("express");
+/**
+ * server.js — Main entry point for the 24/7 Autonomous Software Factory.
+ * Wires up Express, middleware, routes, and starts the HTTP server.
+ */
 
-const isDuplicate = require("./duplicateFilter");
-const classifyError = require("./errorClassifier");
-const PriorityQueue = require("./priorityQueue");
-const handleError = require("./decisionEngine");
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+
+const config = require("./src/config");
+const { requestIdMiddleware, requestLogger, errorHandler } = require("./src/api/middleware");
+const logRoutes = require("./src/api/logRoutes");
+const logger = require("./src/observability/logger");
 
 const app = express();
-app.use(express.json());
-app.use(express.static("public"));
 
-const pq = new PriorityQueue();
+// ─── Core Middleware ──────────────────────────────────────────────────────────
+app.use(express.json({ limit: "1mb" }));
+app.use(requestIdMiddleware);
+app.use(requestLogger);
+app.use(express.static(path.join(__dirname, "public")));
 
-// Store connected clients
-let clients = [];
+// ─── API Routes ───────────────────────────────────────────────────────────────
+app.use("/", logRoutes);
 
-// Real-time event stream
-app.get("/events", (req, res) => {
-  res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Cache-Control", "no-cache");
-  res.setHeader("Connection", "keep-alive");
+// ─── Global Error Handler ────────────────────────────────────────────────────
+app.use(errorHandler);
 
-  res.flushHeaders();
+// ─── Start Server ────────────────────────────────────────────────────────────
+const PORT = config.port || 3000;
 
-  clients.push(res);
-
-  req.on("close", () => {
-    clients = clients.filter(c => c !== res);
-  });
-});
-
-// Function to broadcast events
-function sendEvent(data) {
-  clients.forEach(client => {
-    client.write(`data: ${JSON.stringify(data)}\n\n`);
+if (require.main === module) {
+  app.listen(PORT, () => {
+    logger.info("24/7 Autonomous Software Factory started", {
+      port: PORT,
+      env: config.nodeEnv,
+      dashboard: `http://localhost:${PORT}`,
+      health: `http://localhost:${PORT}/health`,
+      metrics: `http://localhost:${PORT}/metrics`,
+    });
   });
 }
 
-// API to push logs
-app.post("/log", async (req, res) => {
-  const log = req.body;
-
-  if (!log || !log.service || !log.error_code) {
-    return res.status(400).json({
-      error: "Invalid log format."
-    });
-  }
-
-  if (isDuplicate(log)) {
-    sendEvent({ type: "duplicate", log });
-    return res.json({ status: "duplicate" });
-  }
-
-  const severity = classifyError(log);
-  pq.enqueue(log, severity);
-
-  const item = pq.dequeue();
-  const result = await handleError(item.log, item.severity);
-
-  // Send real-time update
-  sendEvent({
-  type: "processed",
-  log: item.log,
-  severity: item.severity,
-  action: result,
-  before: result.before || "",
-  after: result.after || ""
-});
-
-  console.log("DEBUG RESULT:", result);
-  res.json({ status: "processed", severity });
-});
-
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
-});
+module.exports = app; // Export for integration tests

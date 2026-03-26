@@ -1,135 +1,718 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Autonomous Software Factory Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>24/7 Autonomous Software Factory</title>
+  <meta name="description" content="Real-time self-healing production system dashboard: AI-powered error repair, severity classification, and live observability." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
+    /* ── Reset & Tokens ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #060a12;
+      --bg-panel:   #0d1117;
+      --bg-card:    #111827;
+      --bg-input:   #1a2235;
+      --border:     #1e2d45;
+      --border-glow:#2563eb44;
+
+      --text:       #e2e8f0;
+      --text-muted: #64748b;
+      --text-dim:   #94a3b8;
+
+      --blue:       #3b82f6;
+      --blue-glow:  #3b82f622;
+      --cyan:       #06b6d4;
+      --green:      #10b981;
+      --green-glow: #10b98122;
+      --yellow:     #f59e0b;
+      --orange:     #f97316;
+      --red:        #ef4444;
+      --red-glow:   #ef444422;
+      --purple:     #8b5cf6;
+
+      --radius:     12px;
+      --radius-sm:  8px;
+      --shadow:     0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    html, body { height: 100%; }
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated Background Grid ───────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 24px 48px; position: relative; z-index: 1; }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+    .logo { display: flex; align-items: center; gap: 14px; }
+    .logo-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(59,130,246,0.4);
+    }
+    .logo-text h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-text span { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+
+    .status-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 13px; color: var(--text-dim);
+      background: var(--bg-card);
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    /* ── Metrics Row ─────────────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .metric-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .metric-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .metric-value { font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+    .metric-value.blue   { color: var(--blue); }
+    .metric-value.green  { color: var(--green); }
+    .metric-value.red    { color: var(--red); }
+    .metric-value.orange { color: var(--orange); }
+    .metric-value.purple { color: var(--purple); }
+    .metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+
+    /* ── Two-column layout ───────────────────────────────────── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+
+    /* ── Panel ───────────────────────────────────────────────── */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title { font-size: 13px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.8px; }
+    .panel-body { padding: 20px; }
+
+    /* ── Form ────────────────────────────────────────────────── */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .field select,
+    .field input,
+    .field textarea {
+      width: 100%; padding: 10px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit; font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .field select:focus,
+    .field input:focus,
+    .field textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+    .field textarea { resize: vertical; min-height: 64px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+    .btn {
+      width: 100%; padding: 12px;
+      border: none; border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
       color: white;
-      padding: 20px;
+    }
+    .btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-demo {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 12px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+      color: var(--text-dim);
+      background: var(--bg-input);
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 8px;
+    }
+    .btn-demo:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
+
+    /* ── Right column ────────────────────────────────────────── */
+    .right-col { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── Event Feed ──────────────────────────────────────────── */
+    .event-feed {
+      height: 360px; overflow-y: auto;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .event-feed::-webkit-scrollbar { width: 4px; }
+    .event-feed::-webkit-scrollbar-track { background: transparent; }
+    .event-feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .event-item {
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--border);
+      animation: slideIn 0.3s ease-out;
+      transition: border-color 0.2s;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .event-item.LOW      { border-color: var(--green); }
+    .event-item.MEDIUM   { border-color: var(--yellow); }
+    .event-item.HIGH     { border-color: var(--orange); }
+    .event-item.CRITICAL { border-color: var(--red); animation: criticalPulse 0.5s ease-out; }
+    .event-item.duplicate { border-color: var(--text-muted); opacity: 0.6; }
+
+    @keyframes criticalPulse {
+      0%   { background: rgba(239,68,68,0.25); }
+      100% { background: var(--bg-card); }
     }
 
-    h2 {
-      color: #38bdf8;
-    }
+    .event-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .event-time { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .event-service { font-size: 11px; color: var(--text-dim); }
 
-    .card {
-      background: #1e293b;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
-      margin-bottom: 20px;
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 999px; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .badge-LOW      { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+    .badge-MEDIUM   { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+    .badge-HIGH     { background: rgba(249,115,22,0.15); color: var(--orange); border: 1px solid rgba(249,115,22,0.3); }
+    .badge-CRITICAL { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+    .badge-dup      { background: rgba(100,116,139,0.15); color: var(--text-muted); border: 1px solid rgba(100,116,139,0.3); }
 
-    input, select, button {
-      width: 100%;
-      padding: 8px;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: none;
+    .action-badge {
+      padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
     }
+    .action-DEPLOYED      { background: rgba(16,185,129,0.15); color: var(--green); }
+    .action-AUTO_RECOVERY { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .action-ESCALATED     { background: rgba(239,68,68,0.15); color: var(--red); }
 
-    button {
-      background: #38bdf8;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .event-message { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+    .event-message strong { color: var(--text); }
 
-    #output {
-      margin-top: 20px;
-      background: #020617;
-      padding: 15px;
-      border-radius: 8px;
-      white-space: pre-wrap;
+    .empty-state { text-align: center; padding: 48px 16px; color: var(--text-muted); }
+    .empty-state .icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+    .empty-state p { font-size: 14px; }
+
+    /* ── Code Diff Panel ─────────────────────────────────────── */
+    .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 700px) { .diff-grid { grid-template-columns: 1fr; } }
+
+    .diff-pane { background: var(--bg); border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
+    .diff-pane-header { padding: 8px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    .diff-pane-header.before { color: var(--red); background: var(--red-glow); }
+    .diff-pane-header.after  { color: var(--green); background: var(--green-glow); }
+    .diff-code {
+      padding: 14px; margin: 0; overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7;
+      color: var(--text-dim); min-height: 100px; max-height: 280px; overflow-y: auto;
+      white-space: pre;
     }
+    .diff-empty { display: flex; align-items: center; justify-content: center; min-height: 100px; color: var(--text-muted); font-size: 12px; }
+
+    /* ── Circuit Breaker Indicator ───────────────────────────── */
+    .cb-panel {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .cb-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .cb-dot.CLOSED    { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .cb-dot.OPEN      { background: var(--red);   box-shadow: 0 0 8px var(--red);   animation: blink 1s ease-in-out infinite; }
+    .cb-dot.HALF_OPEN { background: var(--yellow); box-shadow: 0 0 8px var(--yellow); }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .cb-info { flex: 1; }
+    .cb-state { font-size: 13px; font-weight: 600; }
+    .cb-sub   { font-size: 11px; color: var(--text-muted); }
+
+    /* ── Scrollbar global ────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Loading spinner ─────────────────────────────────────── */
+    .spinner {
+      display: inline-block; width: 12px; height: 12px;
+      border: 2px solid #ffffff44; border-top-color: white;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+<div class="container">
 
-<h2>24/7 Autonomous Software Factory</h2>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">⚙️</div>
+      <div class="logo-text">
+        <h1>Autonomous Software Factory</h1>
+        <span>24/7 Self-Healing Production System</span>
+      </div>
+    </div>
+    <div class="status-badge">
+      <div class="status-dot"></div>
+      <span id="connection-status">Connecting…</span>
+    </div>
+  </header>
 
-<div class="card">
-  <label>Service</label>
-  <select id="service">
-    <option value="ui-service">UI Service</option>
-    <option value="api-service">API Service</option>
-    <option value="auth-service">Auth Service</option>
-    <option value="payment-service">Payment Service</option>
-    <option value="db-service">Database Service</option>
-  </select>
+  <!-- Metrics Row -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Total Logs</div>
+      <div class="metric-value blue" id="m-total">0</div>
+      <div class="metric-sub">processed</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Repaired</div>
+      <div class="metric-value green" id="m-repaired">0</div>
+      <div class="metric-sub">auto-fixed</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Escalated</div>
+      <div class="metric-value red" id="m-escalated">0</div>
+      <div class="metric-sub">human needed</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Recovered</div>
+      <div class="metric-value purple" id="m-recovered">0</div>
+      <div class="metric-sub">auto-recovery</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Cache Hits</div>
+      <div class="metric-value orange" id="m-cache">0</div>
+      <div class="metric-sub">AI calls saved</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Avg Fix Time</div>
+      <div class="metric-value blue" id="m-avg">—</div>
+      <div class="metric-sub">milliseconds</div>
+    </div>
+  </div>
 
-  <label>Error Code</label>
-  <select id="error">
-  <option value="UI_NULL_ERROR">UI Null Error</option>
-  <option value="API_TIMEOUT">API Timeout</option>
-  <option value="AUTH_FAILURE">Auth Failure</option>
-  <option value="DB_CONNECTION_LOST">DB Connection Lost</option>
-  <option value="CART_EMPTY">Cart Empty Error</option>
-</select>
+  <!-- Main Grid -->
+  <div class="main-grid">
 
-  <button onclick="sendLog()">Send Log</button>
+    <!-- Left: Form + Circuit Breaker -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- Send Log Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">📥 Ingest Log</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="field">
+            <label for="service">Service</label>
+            <select id="service">
+              <option value="ui-service">UI Service</option>
+              <option value="api-service">API Service</option>
+              <option value="auth-service">Auth Service</option>
+              <option value="payment-service">Payment Service</option>
+              <option value="db-service">Database Service</option>
+              <option value="cart-service">Cart Service</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="error">Error Code</label>
+            <select id="error">
+              <option value="UI_NULL_ERROR">UI_NULL_ERROR (LOW)</option>
+              <option value="CART_EMPTY">CART_EMPTY (LOW)</option>
+              <option value="API_TIMEOUT">API_TIMEOUT (MEDIUM)</option>
+              <option value="SERVICE_UNAVAILABLE">SERVICE_UNAVAILABLE (MEDIUM)</option>
+              <option value="RATE_LIMIT_EXCEEDED">RATE_LIMIT_EXCEEDED (MEDIUM)</option>
+              <option value="AUTH_FAILURE">AUTH_FAILURE (HIGH)</option>
+              <option value="PAYMENT_DECLINED">PAYMENT_DECLINED (HIGH)</option>
+              <option value="DB_CONNECTION_LOST">DB_CONNECTION_LOST (CRITICAL)</option>
+              <option value="SYSTEM_CRASH">SYSTEM_CRASH (CRITICAL)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message (optional)</label>
+            <input type="text" id="message" placeholder="e.g. Cannot read property 'map' of null" />
+          </div>
+
+          <div class="field">
+            <label for="stack">Stack Trace (optional)</label>
+            <textarea id="stack" placeholder="at render (app.js:3:14)&#10;at handler (server.js:45:5)"></textarea>
+          </div>
+
+          <button class="btn btn-primary" id="send-btn" onclick="sendLog()">
+            Send Log to Factory
+          </button>
+        </div>
+      </div>
+
+      <!-- Demo Scenarios -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🎬 Demo Scenarios</span>
+        </div>
+        <div class="panel-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">Quick-send pre-configured logs for each demo case:</p>
+
+          <button class="btn-demo" onclick="sendDemo('UI_NULL_ERROR','ui-service','Cannot read property map of null')">
+            <span style="color:var(--green)">●</span>
+            <span>LOW — UI_NULL_ERROR → AI Fix + Deploy</span>
+          </button>
+          <button class="btn-demo" onclick="sendDemo('API_TIMEOUT','api-service','Request timed out after 30000ms')">
+            <span style="color:var(--yellow)">●</span>
+            <span>MEDIUM — API_TIMEOUT → Auto-Recovery</span>
+          </button>
+          <button class="btn-demo" onclick="sendDemo('AUTH_FAILURE','auth-service','JWT signature verification failed')">
+            <span style="color:var(--orange)">●</span>
+            <span>HIGH — AUTH_FAILURE → Escalation</span>
+          </button>
+          <button class="btn-demo" onclick="sendDemo('DB_CONNECTION_LOST','db-service','Connection pool exhausted')">
+            <span style="color:var(--red)">●</span>
+            <span>CRITICAL — DB_CONNECTION_LOST → P0 Alert</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Circuit Breaker -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">⚡ Circuit Breaker — AI Service</span>
+        </div>
+        <div class="panel-body">
+          <div class="cb-panel" id="cb-panel">
+            <div class="cb-dot CLOSED" id="cb-dot"></div>
+            <div class="cb-info">
+              <div class="cb-state" id="cb-state">CLOSED</div>
+              <div class="cb-sub" id="cb-sub">AI calls flowing normally</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);" id="cb-failures">0 failures</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right: Event Feed + Diff -->
+    <div class="right-col">
+
+      <!-- Live Event Feed -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">📡 Live Event Feed</span>
+          <button onclick="clearFeed()" style="background:none;border:1px solid var(--border);color:var(--text-muted);padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Clear</button>
+        </div>
+        <div class="event-feed" id="feed">
+          <div class="empty-state">
+            <div class="icon">🏭</div>
+            <p>System ready — send a log to start</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Diff Panel -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">🔧 Code Patch — Before / After</span>
+          <span id="diff-label" style="font-size:11px;color:var(--text-muted);">No patch yet</span>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <div class="diff-grid">
+            <div class="diff-pane">
+              <div class="diff-pane-header before">⛔ Before (buggy)</div>
+              <div id="before-code" class="diff-empty">No data yet</div>
+            </div>
+            <div class="diff-pane">
+              <div class="diff-pane-header after">✅ After (patched)</div>
+              <div id="after-code" class="diff-empty">No data yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>
 
-<div id="output">System ready…</div>
-
-<h3>Before Fix</h3>
-<pre id="before"></pre>
-
-<h3>After Fix</h3>
-<pre id="after"></pre>
-
 <script>
-async function sendLog() {
-  const service = document.getElementById("service").value;
-  const error_code = document.getElementById("error").value;
+  // ── State ─────────────────────────────────────────────────────────────────
+  let eventCount = 0;
+  const MAX_FEED_ITEMS = 50;
 
-  await fetch("/log", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      service,
-      error_code,
-      file: "production/app.js"
-    })
-  });
-}
+  // ── SSE Connection ────────────────────────────────────────────────────────
+  const eventSource = new EventSource('/events');
 
-// Real-time event listener
-const eventSource = new EventSource("/events");
+  eventSource.onopen = () => {
+    document.getElementById('connection-status').textContent = 'Live';
+    document.querySelector('.status-dot').style.background = 'var(--green)';
+  };
 
-eventSource.onmessage = function(event) {
-  const data = JSON.parse(event.data);
+  eventSource.onerror = () => {
+    document.getElementById('connection-status').textContent = 'Reconnecting…';
+    document.querySelector('.status-dot').style.background = 'var(--yellow)';
+  };
 
-  const output = document.getElementById("output");
+  eventSource.onmessage = (event) => {
+    const data = JSON.parse(event.data);
 
-  if (data.type === "duplicate") {
-    output.textContent =
-      "Duplicate log ignored: " +
-      JSON.stringify(data.log);
-  }
+    if (data.type === 'ping' || data.type === 'connected') return;
 
-  if (data.type === "processed") {
-    output.textContent =
-      "Log: " + JSON.stringify(data.log) +
-      "\nSeverity: " + data.severity +
-      "\nAction: " + data.action.type +
-      "\nMessage: " + data.action.message;
-
-    // Show before/after code
-    if (data.before) {
-      document.getElementById("before").textContent = data.before;
+    if (data.type === 'duplicate') {
+      addFeedItem(null, 'duplicate', null, data.log);
     }
 
-    if (data.after) {
-      document.getElementById("after").textContent = data.after;
+    if (data.type === 'processed') {
+      addFeedItem(data.severity, data.action.type, data.action.message, data.log, data.action.deployment);
+
+      // Update code diff panel
+      if (data.before || data.after) {
+        updateDiffPanel(data.before, data.after, data.log.error_code);
+      }
+    }
+
+    // Refresh metrics after each event
+    fetchMetrics();
+  };
+
+  // ── Fetch Metrics ─────────────────────────────────────────────────────────
+  async function fetchMetrics() {
+    try {
+      const [metricsRes, circuitRes] = await Promise.all([
+        fetch('/metrics'),
+        fetch('/circuit'),
+      ]);
+      const m = await metricsRes.json();
+      const c = await circuitRes.json();
+
+      document.getElementById('m-total').textContent     = m.totalLogs;
+      document.getElementById('m-repaired').textContent  = m.successfulRepairs;
+      document.getElementById('m-escalated').textContent = m.escalations;
+      document.getElementById('m-recovered').textContent = m.autoRecoveries;
+      document.getElementById('m-cache').textContent     = m.aiCacheHits;
+      document.getElementById('m-avg').textContent       = m.avgRepairTimeMs > 0 ? m.avgRepairTimeMs + 'ms' : '—';
+
+      // Circuit breaker
+      const dot = document.getElementById('cb-dot');
+      dot.className = `cb-dot ${c.state}`;
+      document.getElementById('cb-state').textContent = c.state;
+      document.getElementById('cb-failures').textContent = `${c.failureCount} failures`;
+      const subText = {
+        CLOSED: 'AI calls flowing normally',
+        OPEN: 'AI calls blocked (cooling down)',
+        HALF_OPEN: 'Trial call in progress…',
+      };
+      document.getElementById('cb-sub').textContent = subText[c.state] || '';
+    } catch (e) {}
+  }
+
+  // Poll metrics every 5s
+  fetchMetrics();
+  setInterval(fetchMetrics, 5000);
+
+  // ── Send Log ──────────────────────────────────────────────────────────────
+  async function sendLog() {
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Sending…';
+
+    const service    = document.getElementById('service').value;
+    const error_code = document.getElementById('error').value;
+    const message    = document.getElementById('message').value;
+    const stack_trace = document.getElementById('stack').value;
+
+    try {
+      await fetch('/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service,
+          error_code,
+          message: message || undefined,
+          stack_trace: stack_trace || undefined,
+          file: 'production/app.js',
+        }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = 'Send Log to Factory';
+  }
+
+  async function sendDemo(errorCode, service, message) {
+    try {
+      await fetch('/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service,
+          error_code: errorCode,
+          message,
+          file: 'production/app.js',
+        }),
+      });
+    } catch (e) {}
+  }
+
+  // ── Feed Management ────────────────────────────────────────────────────────
+  function addFeedItem(severity, actionType, message, log, deployment) {
+    const feed = document.getElementById('feed');
+
+    // Remove empty state
+    const empty = feed.querySelector('.empty-state');
+    if (empty) empty.remove();
+
+    eventCount++;
+
+    const item = document.createElement('div');
+    item.className = `event-item ${severity || 'duplicate'}`;
+
+    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+
+    let badges = '';
+    if (severity) {
+      badges += `<span class="badge badge-${severity}">${severity}</span>`;
+    } else {
+      badges += `<span class="badge badge-dup">DUPLICATE</span>`;
+    }
+
+    if (actionType) {
+      badges += ` <span class="action-badge action-${actionType}">${actionType.replace('_', ' ')}</span>`;
+    }
+
+    let deploymentInfo = '';
+    if (deployment) {
+      const icon = deployment.status === 'DEPLOYED' ? '🚀' : '↩️';
+      deploymentInfo = `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${icon} Canary: ${deployment.message}</div>`;
+    }
+
+    item.innerHTML = `
+      <div class="event-meta">
+        <span class="event-time">${time}</span>
+        <span class="event-service">${log.service || ''}</span>
+        ${badges}
+      </div>
+      <div class="event-message">
+        <strong>${log.error_code}</strong>
+        ${message ? ` — ${message}` : ''}
+      </div>
+      ${deploymentInfo}
+    `;
+
+    feed.prepend(item);
+
+    // Trim old items
+    const items = feed.querySelectorAll('.event-item');
+    if (items.length > MAX_FEED_ITEMS) {
+      items[items.length - 1].remove();
     }
   }
-};
+
+  function clearFeed() {
+    const feed = document.getElementById('feed');
+    feed.innerHTML = `<div class="empty-state"><div class="icon">🏭</div><p>Feed cleared — ready for new events</p></div>`;
+    document.getElementById('before-code').className = 'diff-empty';
+    document.getElementById('before-code').textContent = 'No data yet';
+    document.getElementById('after-code').className = 'diff-empty';
+    document.getElementById('after-code').textContent = 'No data yet';
+    document.getElementById('diff-label').textContent = 'No patch yet';
+  }
+
+  // ── Diff Panel ────────────────────────────────────────────────────────────
+  function updateDiffPanel(before, after, errorCode) {
+    const beforeEl = document.getElementById('before-code');
+    const afterEl  = document.getElementById('after-code');
+    const label    = document.getElementById('diff-label');
+
+    if (before) {
+      beforeEl.className = 'diff-code';
+      beforeEl.textContent = before;
+    }
+    if (after && after !== before) {
+      afterEl.className = 'diff-code';
+      afterEl.textContent = after;
+      label.textContent = `Patch applied for ${errorCode}`;
+    } else if (after === before) {
+      afterEl.className = 'diff-code';
+      afterEl.textContent = after || '(no change)';
+      label.textContent = `Patch already applied (idempotent)`;
+    }
+  }
 </script>
-
 </body>
 </html>

@@ -1,0 +1,63 @@
+﻿node : node:internal/mo
+dules/cjs/loader:1404
+At line:1 char:1
++ node 
+node_modules/.bin/jest 
+--verbose --runInBand 
+--forceExit 2>&1 |  ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (node:internal   
+ /modules/cjs/loade    
+r:1404:String) [],     
+RemoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+  throw err;
+  ^
+
+Error: Cannot find 
+module 'C:\Users\aadha\
+Downloads\software-fact
+ory\node_modules\.bin\j
+est'
+    at Function._resolv
+eFilename (node:interna
+l/modules/cjs/loader:14
+01:15)
+    at 
+defaultResolveImpl (nod
+e:internal/modules/cjs/
+loader:1057:19)
+    at 
+resolveForCJSWithHooks 
+(node:internal/modules/
+cjs/loader:1062:22)
+    at Function._load (
+node:internal/modules/c
+js/loader:1211:37)
+    at TracingChannel.t
+raceSync (node:diagnost
+ics_channel:322:14)
+    at wrapModuleLoad (
+node:internal/modules/c
+js/loader:235:24)
+    at Function.execute
+UserEntryPoint [as 
+runMain] (node:internal
+/modules/run_main:171:5
+)
+    at node:internal/ma
+in/run_main_module:36:4
+9 {
+  code: 
+'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v22.17.1
